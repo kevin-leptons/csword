@@ -22,12 +22,21 @@ AUTHOR
 #define __CSWORD_RES_H__
 
 #ifdef CSWORD_DEBUG
-#define RES_PATH "../res"
-#elif __linux__
-#define RES_PATH "/usr/share"
-#elif __WIN32__ || _WIN64
-#define RES_PATH "res"
-#error "Doen't support OS type"
+	#if __linux__
+		#define RES_PATH "..res/"
+	#elif __WIN32__ || _WIN64
+		#define RES_PATH "..\\res\\"
+	#else
+		#error "Doen't support OS type"
+	#endif
+#else
+	#if __linux__
+		#define RES_PATH "/usr/share/"
+	#elif __WIN32__ || _WIN64
+		#define RES_PATH "res\\"
+	#else
+		#error "Doen't support OS type"
+	#endif
 #endif
 
 int res(const char *rpath, char *buf);
