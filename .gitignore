@@ -1,0 +1,6 @@
+dest/
+dist/
+pack/
+tmp/
+*.swp
+*.log
