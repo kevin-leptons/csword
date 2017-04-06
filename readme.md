@@ -2,6 +2,9 @@
 
 Create and verify C package by cstyle standard.
 
+Platforms supported: POSIX
+Platforms will be supported: Windows NT
+
 # FEATURES
 
 Constructing...

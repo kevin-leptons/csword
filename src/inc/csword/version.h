@@ -20,6 +20,9 @@ AUTHOR
 #define __CSWORD_VERSION_H__
 
 #include <stdint.h>
+#include <stdlib.h>
+
+#define VERSION_STR_MAX 255
 
 struct version
 {
@@ -31,6 +34,6 @@ struct version
 
 const extern struct version _VERSION;
 
-char *strver(const struct version *ver, char *str);
+int strver(const struct version *ver, char *str, size_t size);
 
 #endif

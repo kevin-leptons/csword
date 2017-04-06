@@ -12,9 +12,15 @@ AUTHOR
 
 #include <stdio.h>
 
+#include <csword/error.h>
 #include <csword/version.h>
 
 int cmd_version(void)
 {
-	printf("csword v%s\n", strver(&_VERSION, NULL));
+	char buf[VERSION_STR_MAX];
+
+	strver(&_VERSION, buf, sizeof(buf));
+	printf("csword v%s, %s %s\n", buf, __DATE__, __TIME__);
+
+	return FN_OK;
 }
