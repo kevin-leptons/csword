@@ -40,7 +40,7 @@ repo_build()
 	# tar -zcvf $DEST/$PKG_TMP_DIR.tar.gz -C $RES $PKG_TMP_DIR
 
     # build
-    cmake $ROOT -DCSWORD_DEBUG=1
+    cmake $ROOT
     make
 }
 

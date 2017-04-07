@@ -22,31 +22,28 @@ AUTHOR
 #include <csword/res.h>
 #include <csword/fs.h>
 
-static int create_ske(const char *name, const char *dir);
-static int create_lib(const char *name, const char *dir);
-static int create_cmd(const char *name, const char *dir);
-static int create_gui(const char *name, const char *dir);
+static int create_ske(const struct csinfo *info, const char *dir);
+static int create_lib(const struct csinfo *info, const char *dir);
+static int create_cmd(const struct csinfo *info, const char *dir);
+static int create_gui(const struct csinfo *info, const char *dir);
 
-int cmd_create(const char *dir, enum ptype type)
+int cmd_create(const struct csinfo *info, const char *dir)
 {
-	char name[NAME_MAX];
-
-	if (type == LIB)
-		return create_lib(name, dir);
-	else if (type == CMD)
-		return create_cmd(name, dir);
-	else if (type == GUI)
-		return create_gui(name, dir);
+	if (info->type == LIB)
+		return create_lib(info, dir);
+	else if (info->type == CMD)
+		return create_cmd(info, dir);
+	else if (info->type == GUI)
+		return create_gui(info, dir);
 	else
 		return FN_ER;
 }
 
-static int create_ske(const char*name, const char *dir)
+static int create_ske(const struct csinfo *info, const char *dir)
 {
 	char src[PATH_MAX], dest[PATH_MAX];
 	enum tbool is_dir;
-
-	printf("Create package in: %s\n", dir);
+	struct cspec spec[4];
 
 	is_dir = isdir(dir);
 	if (is_dir == T_TRUE) {
@@ -56,38 +53,43 @@ static int create_ske(const char*name, const char *dir)
 		msg_error("Permission is denie");
 		return FN_ER;
 	}
-	if (make_dir(dir, S_IRUSR | S_IWUSR | S_IXUSR) != 0)
-		return FN_ER;
+	if (make_dir(dir, S_IRWXU | S_IRWXG | S_IRWXO) != FN_OK)
+		exit_error("make_dir");
 
 	if (res("ske-tmp/readme.md", src) != FN_OK)
-		return FN_ER;
+		exit_error("res");
 	if (pjoin(dest, dir, "readme.md") != FN_OK)
-		return FN_ER;
-	if (fcopy(src, dest) != FN_OK)
+		exit_error("pjoin");
+	mk_cspec(&spec[0], "$PKG_NAME", info->name);
+	mk_cspec(&spec[1], "$AUTHOR", info->author);
+	mk_cspec(&spec[2], "$LICENSE", info->license);
+	mk_cspec(&spec[3], "$EMAIL", info->email);
+	if (fclone(src, dest, spec, 2) != FN_OK)
+		exit_error("fclone");
+
+	printf("Package was created: %s\n", dir);
+	return FN_OK;
+}
+
+static int create_lib(const struct csinfo *info, const char *dir)
+{
+	if (create_ske(info, dir) != FN_OK)
 		return FN_ER;
 
 	return FN_OK;
 }
 
-static int create_lib(const char *name, const char *dir)
+static int create_cmd(const struct csinfo *info, const char *dir)
 {
-	if (create_ske(name, dir) != FN_OK)
+	if (create_ske(info, dir) != FN_OK)
 		return FN_ER;
 
 	return FN_OK;
 }
 
-static int create_cmd(const char *name, const char *dir)
+static int create_gui(const struct csinfo *info, const char *dir)
 {
-	if (create_ske(name, dir) != FN_OK)
-		return FN_ER;
-
-	return FN_OK;
-}
-
-static int create_gui(const char *name, const char *dir)
-{
-	if (create_ske(name, dir) != FN_OK)
+	if (create_ske(info, dir) != FN_OK)
 		return FN_ER;
 
 	return FN_OK;

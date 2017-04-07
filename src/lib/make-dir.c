@@ -21,9 +21,23 @@ int make_dir(const char *path, mode_t mode)
 {
 	char tpath[PATH_MAX];
 	char *p;
+	size_t len;
 
+	errno = 0;
 	strcpy(tpath, path);
-	for (p = tpath + 1; *p != '\0'; p++) {
+	len = strlen(tpath);
+
+	if (len > 0) {
+		if (tpath[0] == DELIMITER)
+			p = tpath + 1;
+		else
+			p = tpath;
+
+		if (tpath[len - 1] == DELIMITER)
+			tpath[len - 1] = '\0';
+	}
+
+	for (; *p != '\0'; p++) {
 		if (*p != DELIMITER)
 			continue;
 

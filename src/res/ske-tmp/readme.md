@@ -1,4 +1,8 @@
-# [PKG_NAME]
+# $PKG_NAME
+
+$AUTHOR <br>
+$EMAIL <br>
+$LICENSE
 
 # FEATURES
 

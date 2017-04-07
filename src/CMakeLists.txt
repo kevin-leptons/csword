@@ -1,4 +1,4 @@
-file(GLOB CSWORD_LIB_FILES lib/*.c)
+	file(GLOB CSWORD_LIB_FILES lib/*.c)
 file(GLOB CSWORD_EXE_FILES exe/*.c)
 
 add_library(csword-slave SHARED ${CSWORD_LIB_FILES})

@@ -19,17 +19,12 @@ AUTHOR
 #ifndef __CSWORD_CMD_H__
 #define __CSWORD_CMD_H__
 
-enum ptype
-{
-	LIB,
-	CMD,
-	GUI
-};
+#include <csword/type.h>
 
 int cmd_help(void);
 
 int cmd_version(void);
 
-int cmd_create(const char *dir, enum ptype type);
+int cmd_create(const struct csinfo *info, const char *dir);
 
 #endif

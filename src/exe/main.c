@@ -22,10 +22,11 @@ AUTHOR
 
 #include <csword/error.h>
 #include <csword/cmd.h>
+#include <csword/type.h>
 
 int main(int argc, char *argv[])
 {
-	enum ptype pkg_type;
+	struct csinfo info;
 
 	if (argc == 2) {
 		if (strcmp(argv[1], "help") == 0)
@@ -40,15 +41,23 @@ int main(int argc, char *argv[])
 	if (argc == 4) {
 		if (strcmp(argv[1], "create") == 0) {
 			if (strcmp(argv[2], "lib") == 0)
-				pkg_type = LIB;
+				info.type = LIB;
 			else if (strcmp(argv[2], "cmd") == 0)
-				pkg_type = CMD;
+				info.type = CMD;
 			else if (strcmp(argv[2], "gui") == 0)
-				pkg_type = GUI;
+				info.type = GUI;
 			else
 				exit_uerror("Specify package type: lib, cmd, gui");
 
-			return cmd_create(argv[3], pkg_type);
+			strcpy(info.name, "CSWORD");
+			strcpy(info.author, "Kevin Leptons");
+			strcpy(info.email, "kevin.leptons@gmail.com");
+			strcpy(info.license, "GPLv3");
+			info.version.major = 0;
+			info.version.minor = 1;
+			info.version.revison = 0;
+			info.version.build = 0;
+			return cmd_create(&info, argv[3]);
 		}
 
 		cmd_help();
